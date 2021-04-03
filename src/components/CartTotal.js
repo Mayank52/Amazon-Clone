@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import NumberFormat from "react-number-format";
+import { useHistory } from "react-router-dom";
 
 function CartTotal({ getCount, getTotalPrice }) {
+  const history = useHistory();
   return (
     <Container>
       <Subtotal>
@@ -16,7 +18,9 @@ function CartTotal({ getCount, getTotalPrice }) {
           />
         </h2>
       </Subtotal>
-      <CheckoutButton>Proceed to Checkout</CheckoutButton>
+      <CheckoutButton onClick={(e) => history.push("/payment")}>
+        Proceed to Checkout
+      </CheckoutButton>
     </Container>
   );
 }

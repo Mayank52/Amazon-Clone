@@ -9,9 +9,17 @@ import Header from "./components/Header";
 import styled from "styled-components";
 import Home from "./components/Home";
 import Cart from "./components/Cart";
+import Orders from "./components/Orders";
+import Payment from "./components/Payment";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { db, auth } from "./config/firebase";
 import Login from "./components/Login";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(
+  "pk_test_51I59kfFPKVUdiMIHQQ0jvz5gRtpOYFxNIsBfsCthH8cw8fqeuPMr57RAkYaQu8V9jWOvYgWupemKWLvylGh3JYvx00r6jIt7DL"
+);
 
 function App() {
   //retrieve the user from local storage of browser
@@ -28,6 +36,14 @@ function App() {
 
       setCartItems(tempItems);
     });
+  };
+
+  const getTotalPrice = () => {
+    let total = 0;
+    cartItems.forEach((item) => {
+      total += item.product.quantity * item.product.price;
+    });
+    return total;
   };
 
   const signOut = () => {
@@ -52,7 +68,15 @@ function App() {
           <Header user={user} signOut={signOut} cartItems={cartItems} />
           <Switch>
             <Route path="/cart">
-              <Cart cartItems={cartItems} />
+              <Cart cartItems={cartItems} getTotalPrice = {getTotalPrice}/>
+            </Route>
+            <Route path="/orders">
+              <Orders cartItems={cartItems} getTotalPrice = {getTotalPrice}/>
+            </Route>
+            <Route path="/payment">
+              <Elements stripe={stripePromise}>
+                <Payment user={user} cartItems={cartItems} getTotalPrice = {getTotalPrice}/>
+              </Elements>
             </Route>
             <Route path="/">
               <Home />

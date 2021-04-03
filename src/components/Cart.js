@@ -3,7 +3,7 @@ import styled from "styled-components";
 import CartItems from "./CartItems";
 import CartTotal from "../components/CartTotal";
 
-function Cart({ cartItems }) {
+function Cart({ cartItems, getTotalPrice }) {
   const getCount = () => {
     let count = 0;
     cartItems.forEach((item) => {
@@ -12,13 +12,13 @@ function Cart({ cartItems }) {
     return count;
   };
 
-  const getTotalPrice = () => {
-    let total = 0;
-    cartItems.forEach((item) => {
-      total += item.product.quantity * item.product.price;
-    });
-    return total;
-  };
+  // const getTotalPrice = () => {
+  //   let total = 0;
+  //   cartItems.forEach((item) => {
+  //     total += item.product.quantity * item.product.price;
+  //   });
+  //   return total;
+  // };
 
   return (
     <Container>

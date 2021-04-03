@@ -50,12 +50,16 @@ const Container = styled.div`
   justify-content: center;
   flex-direction: column;
   background-color: white;
-  flex: 1;
+  flex-grow: 1;
   z-index: 100;
   padding: 20px;
   margin: 10px;
   max-height: 400px;
-  max-width: 400px;
+  width: 500px;
+
+  :hover{
+
+  }
 `;
 const Title = styled.span``;
 const Price = styled.span`

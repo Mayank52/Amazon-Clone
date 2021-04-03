@@ -2,19 +2,20 @@ import React from "react";
 import styled from "styled-components";
 import { db } from "../config/firebase";
 
-function CartItem({ id, cartItem }) {
-
+function CartItem({ id, cartItem, isPayment }) {
   let options = [];
   for (let i = 1; i < Math.max(cartItem.quantity + 1, 25); i++) {
-    options.push(<option value={i}> Qty: {i} </option>);
+    options.push(<option key={i} value={i}> Qty: {i} </option>);
   }
 
   const changeQuantity = (value) => {
     console.log(value);
-    db.collection("cartItems").doc(id).update({
-      quantity: parseInt(value)
-    })
-  }
+    db.collection("cartItems")
+      .doc(id)
+      .update({
+        quantity: parseInt(value),
+      });
+  };
 
   const deleteItem = (e) => {
     e.preventDefault();
@@ -31,9 +32,26 @@ function CartItem({ id, cartItem }) {
         <CartItemInfoTop>{cartItem.name}</CartItemInfoTop>
         <CartItemInfoBottom>
           <CartItemQuantity>
-            <select value={cartItem.quantity} onChange = {(e) => {changeQuantity(e.target.value)}}>{options}</select>
+            {isPayment ? (
+              <CheckoutQuantity>Qty: {cartItem.quantity}</CheckoutQuantity>
+            ) : (
+              <select
+                value={cartItem.quantity}
+                onChange={(e) => {
+                  changeQuantity(e.target.value);
+                }}
+              >
+                {options}
+              </select>
+            )}
           </CartItemQuantity>
-          <CartItemDelete onClick={(e)=>{deleteItem(e)}}>Delete</CartItemDelete>
+          <CartItemDelete
+            onClick={(e) => {
+              deleteItem(e);
+            }}
+          >
+            Delete
+          </CartItemDelete>
         </CartItemInfoBottom>
       </CartItemInfo>
 
@@ -46,7 +64,7 @@ export default CartItem;
 
 const Container = styled.div`
   display: flex;
-  border-bottom: 1px solid #DDD;
+  border-bottom: 1px solid #ddd;
 `;
 const ImageContainer = styled.div`
   width: 180px;
@@ -74,7 +92,7 @@ const CartItemQuantity = styled.div`
     background-color: #f0f2f2;
     padding: 8px;
 
-    :focus{
+    :focus {
       outline: none;
     }
   }
@@ -90,5 +108,9 @@ const CartItemInfoBottom = styled.div`
 `;
 const CartItemPrice = styled.div`
   font-size: 18px;
+  font-weight: 700;
+  margin-right: 20px;
+`;
+const CheckoutQuantity = styled.span`
   font-weight: 700;
 `;

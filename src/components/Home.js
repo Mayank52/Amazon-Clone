@@ -30,7 +30,7 @@ function Home() {
       <Banner></Banner>
       <Content>
         {products.map((data) => (
-          <Product id={data.id} product={data.product} />
+          <Product key={data.id} id={data.id} product={data.product} />
         ))}
       </Content>
     </Container>
@@ -40,7 +40,7 @@ function Home() {
 export default Home;
 
 const Container = styled.div`
-  max-width: 1500px;
+  max-width: 1300px;
   margin: 0 auto;
 `;
 
@@ -54,6 +54,9 @@ const Banner = styled.div`
 
 const Content = styled.div`
   padding: 0 10px;
+  margin: 0 auto;
   margin-top: -350px;
   display: flex;
+  flex-wrap: wrap;
+
 `;
